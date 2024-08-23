@@ -33,4 +33,9 @@ class Event extends Model
 	{
 		return $this->hasOne(Task::class);
 	}
+
+	public function goal(): HasOne
+	{
+		return $this->hasOne(Goal::class);
+	}
 }
