@@ -8,19 +8,24 @@ use App\Models\Event;
 use App\Models\Goal;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\Category;
 
 class GoalController extends Controller
 {
 
 	public function index()
 	{
-		$goals = Goal::with('event')->where('user_id', Auth::id());
-		// return view('goal.index', compact('category'));
+		$goals = Goal::with('event')->whereHas('event', function ($query) {
+			$query->where('user_id', Auth::id());
+		})->get();
+		return view('goal.index', compact('goals'));
 	}
 
 	public function create()
 	{
-		// return view('goal.create', compact('category'));
+		$categories = Category::all();
+		return view('goal.create', compact('categories'));
 	}
 
 	public function store(GoalCreateRequest $request)
@@ -40,20 +45,23 @@ class GoalController extends Controller
 			$goal->event_id = $event->id;
 			$goal->save();
 		});
-		// return redirect()->route('goal.index');
+		return Redirect::route('goal.index')->with('success', 'Meta criada com sucesso.');
 	}
 
 	public function show(string $id)
 	{
-		$goal = Goal::with('event')->find($id);
-		// return view('goals.show', compact('category'));
+		$goal = Goal::with('event')->findOrFail($id);
+	
+		return view('goal.show', compact('goal'));
 	}
-
+	
 	public function edit(string $id)
 	{
-		// return view('goal.edit', compact('category'));
+		$goal = Goal::with('event')->findOrFail($id); 
+	
+		return view('goal.edit', compact('goal'));
 	}
-
+	
 	public function update(GoalUpdateRequest $request, string $id)
 	{
 		$data = $request->validated();
@@ -69,7 +77,7 @@ class GoalController extends Controller
 			$event->category_id = $data['category_id'] ?? $event->category_id;
 			$event->save();
 		});
-		// return redirect()->route('goal.index');
+		return Redirect::route('goal.index')->with('success', 'Meta atualizada com sucesso.');
 	}
 
 	public function destroy(string $id)
@@ -77,6 +85,16 @@ class GoalController extends Controller
 		$goal = Goal::find($id);
 		$event = Event::find($goal->event->id);
 		$event->delete();
-		// return redirect()->route('goal.index');
+		return Redirect::route('goal.index')->with('success', 'Meta excluida com sucesso.');
 	}
+
+	public function filterByStatus(string $status)
+	{
+		$goals = Goal::with('event')->whereHas('event', function ($query) {
+			$query->where('user_id', Auth::id());
+		})->where('status', $status)->get();
+
+		return view('goal.index', compact('goals'));
+	}
+
 }
