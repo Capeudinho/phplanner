@@ -1,0 +1,37 @@
+.container-custom {
+    width: 70%;
+    height: 70%;
+    border-radius: 16px;
+    margin: auto;
+    position: relative;
+}
+
+.add-button, .cancel-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 1rem;
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: 400;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.add-button {
+    background-color: #006184;
+    color: white;
+}
+
+.add-button:hover {
+    background-color: #004a69;
+}
+
+.cancel-button {
+    color: #151C1F; 
+}
+
+.cancel-button:hover {
+    background-color: #ffffff; 
+    color: #151C1F; 
+}
