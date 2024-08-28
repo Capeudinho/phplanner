@@ -46,7 +46,7 @@
 
         </div>
         @include('components.table', [
-            'header' => ['ID', 'Titulo', 'Descrição','Data de Inicio', 'Duração', 'Estatus'],
+            'header' => ['ID', 'Titulo', 'Descrição','Data de Inicio', 'Duração', 'Estatus',  'Categoria'],
             'content' => $goals->map(function($goals) {
                 $durationTranslations = [
                     'week' => 'Semana',
@@ -66,7 +66,8 @@
                     $goals->event->description,
                     $goals->event->start, 
                     $durationTranslations[$goals->duration] ?? $goals->duration, 
-                    $statusTranslations[$goals->status] ?? $goals->status,             
+                    $statusTranslations[$goals->status] ?? $goals->status,
+                    $goals->event->category,              
                 ];
             }),
             'editRoute' => 'goal.edit',
@@ -82,4 +83,9 @@
         window.location.href = url;
     }
 </script>
+
 @endsection
+
+@push('scripts')
+    <script src="/js/searchtable.js"></script>
+@endpush

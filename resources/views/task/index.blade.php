@@ -34,7 +34,7 @@
         </div>
 
         @include('components.table', [
-            'header' => ['ID', 'Titulo', 'Descrição', 'Data de Inicio', 'Duração', 'Estatus'],
+            'header' => ['ID', 'Titulo', 'Descrição', 'Data de Inicio', 'Duração', 'Estatus', 'Categoria'],
             'content' => $tasks->map(function($task) {
                 $durationTranslations = [
                     'hour' => '1 Hora',
@@ -43,9 +43,9 @@
                 ];
 
                 $statusTranslations = [
-                    'pending' => 'Pendente',
-                    'in progress' => 'Em Progresso',
-                    'completed' => 'Concluída',
+                    'delayed' => 'Pendente',
+                    'ongoing' => 'Em Progresso',
+                    'finished' => 'Concluída',
                 ];
 
                 return [
@@ -54,7 +54,8 @@
                     $task->event->description,
                     $task->event->start, 
                     $durationTranslations[$task->duration] ?? $task->duration, 
-                    $statusTranslations[$task->status] ?? $task->status,             
+                    $statusTranslations[$task->status] ?? $task->status,
+                    $task->event->category,            
                 ];
             }),
             'editRoute' => 'task.edit',
@@ -64,3 +65,7 @@
 
 
 @endsection
+
+@push('scripts')
+    <script src="/js/searchtable.js"></script>
+@endpush
