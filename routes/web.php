@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('guest'); 
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -21,6 +21,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 	Route::resource('task', TaskController::class)->middleware(EnsureTaskOwnership::class);
 	Route::resource('goal', GoalController::class)->middleware(EnsureGoalOwnership::class);
+    
+    
+    // rotas do fullcalendar
+    Route::get('/events', [TaskController::class, 'events']); 
 });
 
 require __DIR__.'/auth.php';
