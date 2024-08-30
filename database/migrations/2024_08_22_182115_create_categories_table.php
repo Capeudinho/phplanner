@@ -18,6 +18,7 @@ return new class extends Migration
             $table->softDeletes();
 			$table->string('name');
 			$table->enum('color', CategoryColor::values());
+			$table->foreignId('user_id')->constrained()->onDelete('cascade');
         });
     }
 

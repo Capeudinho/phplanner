@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->id();
             $table->timestamps();
 			$table->enum('duration', TaskDuration::values());
-			$table->enum('status', ['comSucesso', 'semSucesso', 'parcialmenteAtingida', 'indefinido']);
+			$table->enum('status', TaskStatus::values());
 			$table->foreignId('event_id')->constrained()->onDelete('cascade');
         });
     }
