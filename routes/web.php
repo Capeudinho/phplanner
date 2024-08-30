@@ -3,9 +3,11 @@
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Middleware\EnsureGoalOwnership;
 use App\Http\Middleware\EnsureTaskOwnership;
+use App\Http\Middleware\EnsureReportOwnership;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,10 +26,15 @@ Route::middleware('auth')->group(function () {
 	Route::resource('goal', GoalController::class)->middleware(EnsureGoalOwnership::class);
     Route::resource('category', CategoryController::class);
 
-    
+    Route::resource('report', ReportController::class)->middleware(EnsureReportOwnership::class);
     
     // rotas do fullcalendar
     Route::get('/events', [TaskController::class, 'events']); 
+});
+
+Route::prefix('report')->name('report.')->group(function() {
+    Route::get('/', [RelatorioController::class, 'index'])->name('index');
+    Route::post('/generate', [RelatorioController::class, 'generate'])->name('generate');
 });
 
 require __DIR__.'/auth.php';
