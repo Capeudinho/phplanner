@@ -26,7 +26,7 @@
             /> 
             <div class="flex items-center ">
                 <select id="statusFilter" onchange="filterByStatus()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700">
-                    <option value="">Todos os Estatus</option>
+                    <option value="">Todos os Status</option>
                     <option value="succeeded">Atingida</option>
                     <option value="partially succeeded">Parcialmente Atingida</option>
                     <option value="failed">Não Atingida</option>
@@ -46,7 +46,7 @@
 
         </div>
         @include('components.table', [
-            'header' => ['ID', 'Titulo', 'Descrição','Data de Inicio', 'Duração', 'Estatus',  'Categoria'],
+            'header' => ['ID', 'Titulo', 'Descrição','Data de Inicio', 'Duração', 'Status',  'Categoria'],
             'content' => $goals->map(function($goals) {
                 $durationTranslations = [
                     'week' => 'Semana',
