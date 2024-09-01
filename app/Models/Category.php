@@ -13,6 +13,7 @@ class Category extends Model {
 	protected $fillable = [
 		'name',
 		'color',
+		'user_id',
 	];
 
 	public function user(): BelongsTo {
