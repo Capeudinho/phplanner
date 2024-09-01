@@ -23,15 +23,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 	Route::resource('task', TaskController::class)->middleware(EnsureTaskOwnership::class);
 	Route::resource('goal', GoalController::class)->middleware(EnsureGoalOwnership::class);
-    Route::resource('report', ReportController::class)->middleware(EnsureReportOwnership::class);
-    
+    Route::prefix('report')->name('report.')->group(function() {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+        Route::post('/generate', [ReportController::class, 'generate'])->name('generate');
+    });    
     // rotas do fullcalendar
     Route::get('/events', [TaskController::class, 'events']); 
 });
 
-Route::prefix('report')->name('report.')->group(function() {
-    Route::get('/', [RelatorioController::class, 'index'])->name('index');
-    Route::post('/generate', [RelatorioController::class, 'generate'])->name('generate');
-});
+
 
 require __DIR__.'/auth.php';
