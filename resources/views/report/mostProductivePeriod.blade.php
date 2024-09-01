@@ -6,7 +6,6 @@
                     {{Auth::user()->name}}, bem vindo a sua página de relatórios!
                 </div>
                 <div class="container" style="margin-top: 10px">
-                    @include('report.search')
                     <hr>
                     @foreach($years as $year)
                         @php
