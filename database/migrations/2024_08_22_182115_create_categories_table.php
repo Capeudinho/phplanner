@@ -15,8 +15,9 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->softDeletes();
 			$table->string('name');
+
+			$table->string('color');
 			$table->enum('color', CategoryColor::values());
 			$table->foreignId('user_id')->constrained()->onDelete('cascade');
         });

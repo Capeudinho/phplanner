@@ -23,23 +23,15 @@
                             @elseif($category->name == 'Reuniões')
                                 <div class="p-6 border-b border-gray-200" style="background-color: {{ $category->color }};">
                             @else
-                                <div class="p-6 border-b border-gray-200" style="background-color: {{ $category->color }};">
+                                <div class="p-6 border-b border-gray-200">
                             @endif
-                            <h5>{{ $category->name }} - Quantidade: {{ $category->quantity }} - Porcentagem: {{ $category->percentage }}%</h5>
-                            @foreach($goals as $goal)
-                                @if($category->name == $goal->category->name)
-                                    <ul class="status" id="{{ $goal->status }}">
-                                        <li><b>Nome meta:</b> {{ $goal->name }}</li>
-                                    </ul>
-                                @endif
-                            @endforeach
+                                <h3>{{ $category->name }}</h3>
+                                <p>{{ $category->quantity }} tasks ({{ $category->percentage }}%)</p>
                             </div>
                         </div>
-                        <br>
                     @endforeach
                 </div>
             </div>
-            <br>
         </div>
     </div>
 </x-app-layout>

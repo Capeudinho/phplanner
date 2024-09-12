@@ -18,8 +18,6 @@ class Event extends Model
 		'end_time',
 		'category_id',
 		'user_id',
-		'task_id',
-		'goal_id',
 	];
 
 	public function user(): BelongsTo {

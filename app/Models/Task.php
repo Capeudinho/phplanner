@@ -14,7 +14,6 @@ class Task extends Model
 		'duration',
 		'status',
 		'event_id',
-		'shift',
 	];
 
 	public function event(): BelongsTo

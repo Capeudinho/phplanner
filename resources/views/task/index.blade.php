@@ -34,7 +34,7 @@
         </div>
 
         @include('components.table', [
-            'header' => ['ID', 'Titulo', 'Descrição', 'Data de Inicio', 'Duração', 'Estatus', 'Categoria'],
+            'header' => ['ID', 'Titulo', 'Descrição', 'Data de Inicio', 'Duração', 'Status', 'Categoria'],
             'content' => $tasks->map(function($task) {
                 $durationTranslations = [
                     'hour' => '1 Hora',
