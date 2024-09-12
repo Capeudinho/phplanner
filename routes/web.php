@@ -4,6 +4,7 @@ use App\Http\Controllers\GoalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Middleware\EnsureGoalOwnership;
 use App\Http\Middleware\EnsureTaskOwnership;
 use App\Http\Middleware\EnsureReportOwnership;
@@ -27,6 +28,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ReportController::class, 'index'])->name('index');
         Route::post('/generate', [ReportController::class, 'generate'])->name('generate');
     });    
+    Route::resource('category', CategoryController::class);
+
     // rotas do fullcalendar
     Route::get('/events', [TaskController::class, 'events']); 
 });

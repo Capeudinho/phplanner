@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\CategoryColor;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,8 +16,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
 			$table->string('name');
+
 			$table->string('color');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+			$table->enum('color', CategoryColor::values());
+			$table->foreignId('user_id')->constrained()->onDelete('cascade');
         });
     }
 
