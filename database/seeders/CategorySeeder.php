@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\CategoryColor;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
@@ -14,43 +15,43 @@ class CategorySeeder extends Seeder {
     public function run(): void {
         DB::table('categories')->insert([
             'name' => 'Saúde',
-            'color' => 'red',
+            'color' => CategoryColor::RED,
             'user_id' => 1,
         ]);
 
         DB::table('categories')->insert([
             'name' => 'Esporte',
-            'color' => 'blue',
+            'color' => CategoryColor::BLUE,
             'user_id' => 1,
         ]);
 
         DB::table('categories')->insert([
             'name' => 'Estudo',
-            'color' => 'green',
+            'color' => CategoryColor::GREEN,
             'user_id' => 1,
         ]);
 
         DB::table('categories')->insert([
             'name' => 'Trabalho',
-            'color' => 'yellow',
+            'color' => CategoryColor::YELLOW,
             'user_id' => 1,
         ]);
 
         DB::table('categories')->insert([
             'name' => 'Lazer',
-            'color' => 'purple',
+            'color' => CategoryColor::PURPLE,
             'user_id' => 1,
         ]);
 
         DB::table('categories')->insert([
             'name' => 'Reuniões',
-            'color' => 'orange',
+            'color' => CategoryColor::ORANGE,
             'user_id' => 1,
         ]);
 
         DB::table('categories')->insert([
             'name' => 'Outros',
-            'color' => 'gray',
+            'color' => CategoryColor::GRAY,
             'user_id' => 1,
         ]);
     }

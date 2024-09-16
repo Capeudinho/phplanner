@@ -13,8 +13,8 @@ class Kernel extends ConsoleKernel
     protected function schedule (Schedule $schedule)
     {
         $schedule->call(function () {
-            $tasks = Event::where('end_time', '<=', Carbon::now()->addHour())
-            ->where('end_time', '>', Carbon::now())->get();
+            $tasks = Event::where('end', '<=', Carbon::now()->addHour())
+            ->where('end', '>', Carbon::now())->get();
 
             foreach($tasks as $task) {
                 event(new TaskEndingSoon($task));

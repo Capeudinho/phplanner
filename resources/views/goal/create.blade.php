@@ -27,6 +27,13 @@
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
+			<div style="display: inline-block; width: 49%; margin-left: 2%;">
+            <label for="end" class="text-sm mb-1">Data de Término</label>
+            <input type="datetime-local" name="end" id="end" class="w-full px-4 py-2 border border-gray-300 rounded-md @error('end') border-red-500 @enderror" required>
+                @error('end')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
 
         <div class="flex mb-6">

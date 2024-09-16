@@ -17,7 +17,6 @@ return new class extends Migration
 			$table->string('title');
 			$table->text('description');
 			$table->dateTime('start');
-            $table->dateTime('end_time');
 			$table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
 			$table->foreignId('user_id')->constrained()->onDelete('cascade');
         });

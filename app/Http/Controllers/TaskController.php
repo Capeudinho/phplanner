@@ -45,7 +45,7 @@ class TaskController extends Controller
 			$task->event_id = $event->id;
 			$task->save();
 		});
-		return Redirect::route('goal.index')->with('success', 'Meta criada com sucesso.');
+		return Redirect::route('task.index')->with('success', 'Tarefa criada com sucesso.');
 	}
 
 	public function show(string $id)
@@ -86,25 +86,25 @@ class TaskController extends Controller
 	}
 
 	public function events()
-{
-    $events = Task::with('event')
-        ->whereHas('event', function ($query) {
-            $query->where('user_id', Auth::id());
-        })
-        ->get()
-        ->map(function ($task, $category) {
-            return [
-				'id' => $task->id,
-                'title' => $task->event->title,
-                'start' => $task->event->start,
-				'description' => $task->event->description,
-                'status' => $task->status,
-				'color' => $task->category ? $task->category->color : null, 
-                'category_name' => $task->category ? $task->category->name : null, 
-            ];
-        });
+	{
+	    $events = Task::with('event')
+	        ->whereHas('event', function ($query) {
+	            $query->where('user_id', Auth::id());
+	        })
+	        ->get()
+	        ->map(function ($task, $category) {
+	            return [
+					'id' => $task->id,
+	                'title' => $task->event->title,
+	                'start' => $task->event->start,
+					'description' => $task->event->description,
+	                'status' => $task->status,
+					'color' => $task->category ? $task->category->color : null, 
+	                'category_name' => $task->category ? $task->category->name : null, 
+	            ];
+	        });
 
-    return response()->json($events);
-}
-
+	    return response()->json($events);
+	}
+	
 }

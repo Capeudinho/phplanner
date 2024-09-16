@@ -28,6 +28,7 @@ class TaskCreateRequest extends FormRequest
             'title' => ['required', 'string'],
 			'description' => ['required', 'string'],
 			'start' => ['required', 'date'],
+			'end' => ['required', 'date'],
 			'duration' => ['required', Rule::enum(TaskDuration::class)],
 			'status' => ['required', Rule::enum(TaskStatus::class)],
         ];
