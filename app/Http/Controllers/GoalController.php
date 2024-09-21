@@ -97,4 +97,16 @@ class GoalController extends Controller
 		return view('goal.index', compact('goals'));
 	}
 
+	public function dashboard()
+{
+    $currentMonth = now()->month;
+    $goals = Goal::with('event')->whereHas('event', function ($query) use ($currentMonth) {
+        $query->where('user_id', Auth::id())
+              ->whereMonth('start', $currentMonth);
+    })->get();
+
+    return view('dashboard', compact('goals'));
+}
+
+
 }
