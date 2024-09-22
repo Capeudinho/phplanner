@@ -9,9 +9,8 @@
 
     <div class="flex">
         <h1 class="text-2xl mb-4">
-            Suas Metas
-        </h1> 
-        <img src="{{ asset('icons/pin-angle.svg') }}" alt="Ícone de Pin" class="ml-2" style="width: 20px; height: 20px;"> 
+            Suas metas
+        </h1>
     </div>
         
         <div class="flex justify-between items-center mb-4">
@@ -23,15 +22,7 @@
                 onkeyup="searchTable()"
                 placeholder="Pesquisar"
                 class="px-4 py-2 border border-gray-100 rounded-lg mr-2"
-            /> 
-            <div class="flex items-center ">
-                <select id="statusFilter" onchange="filterByStatus()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700">
-                    <option value="">Todos os Status</option>
-                    <option value="succeeded">Atingida</option>
-                    <option value="partially succeeded">Parcialmente Atingida</option>
-                    <option value="failed">Não Atingida</option>
-                </select>
-            </div>
+            />
         </div>
 
 
@@ -46,28 +37,28 @@
 
         </div>
         @include('components.table', [
-            'header' => ['ID', 'Titulo', 'Descrição','Data de Inicio', 'Duração', 'Status',  'Categoria'],
-            'content' => $goals->map(function($goals) {
+            'header' => ['ID', 'Título', 'Descrição', 'Data de início', 'Duração', 'Status', 'Categoria'],
+            'content' => $goals->map(function($goal) {
                 $durationTranslations = [
-                    'week' => 'Semana',
-                    'month' => 'Mês',
-                    'year' => 'Ano',
+                    'week' => '1 semana',
+                    'month' => '1 mês',
+                    'year' => '1 ano',
                 ];
 
                 $statusTranslations = [
                     'succeeded' => 'Atingida',
-                    'partially succeeded' => 'Parcialmente Atingida',
-                    'failed' => 'Não Atingida',
+                    'partially succeeded' => 'Parcialmente atingida',
+                    'failed' => 'Não atingida',
                 ];
 
                 return [
-                    $goals->id,
-                    $goals->event->title,
-                    $goals->event->description,
-                    $goals->event->start, 
-                    $durationTranslations[$goals->duration] ?? $goals->duration, 
-                    $statusTranslations[$goals->status] ?? $goals->status,
-                    $goals->event->category,              
+					$goal->id,
+                    $goal->event->title,
+                    $goal->event->description,
+                    $goal->event->start,
+                    $durationTranslations[$goal->duration] ?? $goal->duration, 
+                    $statusTranslations[$goal->status] ?? $goal->status,
+                    $goal->event->category != null ? ['name' => $goal->event->category->name, 'color' => $goal->event->category->color] : '',              
                 ];
             }),
             'editRoute' => 'goal.edit',

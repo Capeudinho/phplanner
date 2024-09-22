@@ -8,9 +8,8 @@
     <div class="p-6">
         <div class="flex">
             <h1 class="text-2xl mb-4">
-                Suas Tarefas
+                Suas tarefas
             </h1> 
-            <img src="{{ asset('icons/pin-angle.svg') }}" alt="Ícone de Pin" class="ml-2" style="width: 20px; height: 20px;"> 
         </div>
         
         <div class="flex justify-between items-center mb-4">
@@ -34,28 +33,28 @@
         </div>
 
         @include('components.table', [
-            'header' => ['ID', 'Titulo', 'Descrição', 'Data de Inicio', 'Duração', 'Status', 'Categoria'],
+            'header' => ['ID', 'Título', 'Descrição', 'Data de início', 'Duração', 'Status', 'Categoria'],
             'content' => $tasks->map(function($task) {
                 $durationTranslations = [
-                    'hour' => '1 Hora',
+                    'hour' => '1 hora',
                     'half hour' => '30 minutos',
                     'turn' => '1 turno',
                 ];
 
                 $statusTranslations = [
                     'delayed' => 'Pendente',
-                    'ongoing' => 'Em Progresso',
+                    'ongoing' => 'Em progresso',
                     'finished' => 'Concluída',
                 ];
 
                 return [
-                    $task->id,
+					$task->id,
                     $task->event->title,
                     $task->event->description,
-                    $task->event->start, 
+                    $task->event->start,
                     $durationTranslations[$task->duration] ?? $task->duration, 
                     $statusTranslations[$task->status] ?? $task->status,
-                    $task->event->category,            
+                    $task->event->category != null ? ['name' => $task->event->category->name, 'color' => $task->event->category->color] : '',
                 ];
             }),
             'editRoute' => 'task.edit',
