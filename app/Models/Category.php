@@ -21,6 +21,6 @@ class Category extends Model {
 	}
 
 	public function events(): HasMany {
-		return $this->hasMany(Event::class, 'category_id');
+		return $this->hasMany(Event::class);
 	}
 }
