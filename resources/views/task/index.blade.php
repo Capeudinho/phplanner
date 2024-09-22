@@ -51,7 +51,7 @@
 					$task->id,
                     $task->event->title,
                     $task->event->description,
-                    $task->event->start,
+                    \Carbon\Carbon::parse($task->event->start)->format('d/m/Y H:i'),
                     $durationTranslations[$task->duration] ?? $task->duration, 
                     $statusTranslations[$task->status] ?? $task->status,
                     $task->event->category != null ? ['name' => $task->event->category->name, 'color' => $task->event->category->color] : '',

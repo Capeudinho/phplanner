@@ -55,7 +55,7 @@
 					$goal->id,
                     $goal->event->title,
                     $goal->event->description,
-                    $goal->event->start,
+                    \Carbon\Carbon::parse($goal->event->start)->format('d/m/Y H:i'),
                     $durationTranslations[$goal->duration] ?? $goal->duration, 
                     $statusTranslations[$goal->status] ?? $goal->status,
                     $goal->event->category != null ? ['name' => $goal->event->category->name, 'color' => $goal->event->category->color] : '',              
