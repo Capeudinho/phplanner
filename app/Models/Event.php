@@ -20,18 +20,18 @@ class Event extends Model
 	];
 
 	public function user(): BelongsTo {
-		return $this->belongsTo(User::class, 'user_id');
+		return $this->belongsTo(User::class);
 	}
 
 	public function category(): BelongsTo {
-		return $this->belongsTo(Category::class, 'category_id');
+		return $this->belongsTo(Category::class);
 	}
 
 	public function task(): HasOne {
-		return $this->hasOne(Task::class, 'task_id');
+		return $this->hasOne(Task::class);
 	}
 
 	public function goal(): HasOne {
-		return $this->hasOne(Goal::class, 'goal_id');
+		return $this->hasOne(Goal::class);
 	}
 }

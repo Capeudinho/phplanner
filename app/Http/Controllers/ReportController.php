@@ -9,9 +9,40 @@ class ReportController extends Controller {
 
     public function index() {
 		$id = Auth::id();
-		$reports = [];
+		$reports = [
+			'finishedGoals' => [
+				'title' => 'Quantidade e porcentagem de metas finalizadas',
+				'aliases' => ['Quantidade', "Porcentagem"],
+				'results' => [],
+			],
+			'finishedTasks' => [
+				'title' => 'Quantidade e porcentagem de tarefas finalizadas',
+				'aliases' => ['Quantidade', "Porcentagem"],
+				'results' => [],
+			],
+			'productiveWeeks' => [
+				'title' => 'Semanas mais produtivas (em ordem)',
+				'aliases' => ['Semana'],
+				'results' => [],
+			],
+			'productiveTurns' => [
+				'title' => 'Turnos mais produtivos (em ordem)',
+				'aliases' => ['Turno'],
+				'results' => [],
+			],
+			'finishedTaskCategories' => [
+				'title' => 'Categorias de tarefas mais realizadas (em ordem)',
+				'aliases' => ['Categoria'],
+				'results' => [],
+			],
+			'finishedGoalCategories' => [
+				'title' => 'Categorias de metas mais realizadas (em ordem)',
+				'aliases' => ['Categoria'],
+				'results' => [],
+			],
+		];
 
-		$reports['finishedTasks'] = DB::select(
+		$reports['finishedTasks']['results'] = DB::select(
 			'SELECT COUNT(*) AS quantidade, (CAST(COUNT(*) AS FLOAT)/(
 				SELECT COUNT(*)
 				FROM users u, events e, tasks t
@@ -26,7 +57,7 @@ class ReportController extends Controller {
 			AND t.status = \'finished\'
 			AND e.start >= NOW() - INTERVAL \'365 DAYS\'');
 
-		$reports['productiveTurns'] = DB::select(
+		$reports['productiveTurns']['results'] = DB::select(
 			'SELECT CASE
         		WHEN EXTRACT(HOUR FROM e.start) >= 0 AND EXTRACT(HOUR FROM e.start) < 6 THEN \'Madrugada\'
         		WHEN EXTRACT(HOUR FROM e.start) >= 6 AND EXTRACT(HOUR FROM e.start) < 12 THEN \'Manhã\'
@@ -42,8 +73,6 @@ class ReportController extends Controller {
 			GROUP BY turn
 			ORDER BY COUNT(*) DESC');
 
-		var_dump($reports['finishedTasks']);
-		var_dump($reports['productiveTurns']);
-        // return view('report.index', compact('reports'));
+        return view('report.index', compact('reports'));
     }
 }
