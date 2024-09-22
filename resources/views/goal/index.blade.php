@@ -66,6 +66,15 @@
         ])
         
     </div>
+
+<script>
+function filterByStatus() {
+    const filterValue = document.getElementById("statusFilter").value;
+    const url = filterValue ? `/goals/filter/${filterValue}` : '/goals'; 
+    window.location.href = url;
+}
+</script>
+
 @endsection
 
 @push('scripts')
