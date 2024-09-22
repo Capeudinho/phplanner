@@ -28,7 +28,7 @@
                 class="add-button"
             >
                 <img src="{{ asset('icons/plus.svg') }}" alt="Add Icon">
-                Criar Nova Tarefa
+                Cadastrar tarefa
             </a>
         </div>
 

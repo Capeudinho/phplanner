@@ -8,7 +8,7 @@
     <div class="p-6">
         <div class="flex">
             <h1 class="text-2xl mb-4">
-                Suas Categorias
+                Suas categorias
             </h1>
         </div>
         <div class="flex justify-between items-center mb-4">
@@ -27,7 +27,7 @@
                 class="add-button"
             >
                 <img src="{{ asset('icons/plus.svg') }}" alt="Add Icon">
-                Criar Nova Categoria
+                Cadastrar categoria
             </a>
         </div>
 
@@ -42,7 +42,7 @@
                 '#00CC00' => 'Verde',
                 '#00CC66' => 'Menta',
                 '#00CCCC' => 'Ciano',
-                '#0066CC' => 'Azul 1',
+                '#0066CC' => 'Azure',
                 '#0000CC' => 'Azul',
                 '#6600CC' => 'Roxo',
                 '#CC00CC' => 'Magenta',

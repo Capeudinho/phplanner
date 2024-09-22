@@ -94,7 +94,7 @@
 
         <div class="flex justify-between">
             <a href="{{ route('goal.index') }}" class="cancel-button">Cancelar</a>
-            <button type="submit" class="add-button">Atualizar</button>
+            <button type="submit" class="add-button">Editar</button>
         </div>
     </form>
 </div>

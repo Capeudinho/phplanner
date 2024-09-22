@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="p-6">
-        <h1 class="text-2xl font-normal mb-6">Editar Categoria</h1>
+        <h1 class="text-2xl font-normal mb-6">Editar categoria</h1>
 
         <form id="Form" action="{{ route('category.update', ['category' => $category->id]) }}" method="POST">
 
@@ -15,7 +15,7 @@
 
             <div class="mb-6">
                 <div class="mb-4">
-                    <label for="name" class="text-sm mb-1 block">Nome da Categoria</label>
+                    <label for="name" class="text-sm mb-1 block">Nome</label>
                     <input type="text" name="name" id="name"
                         class="w-full px-4 py-2 border border-gray-300 rounded-md @error('name') border-red-500 @enderror"
                         value="{{ old('name', $category->name) }}" required>
@@ -37,7 +37,7 @@
                         <option value="#00CC00" style="color:#00CC00;" {{ $category->color == '#00CC00' ? 'selected' : '' }}>Verde</option>
                         <option value="#00CC66" style="color:#00CC66;" {{ $category->color == '#00CC66' ? 'selected' : '' }}>Menta</option>
                         <option value="#00CCCC" style="color:#00CCCC;" {{ $category->color == '#00CCCC' ? 'selected' : '' }}>Ciano</option>
-                        <option value="#0066CC" style="color:#0066CC;" {{ $category->color == '#0066CC' ? 'selected' : '' }}>Azul 1</option>
+                        <option value="#0066CC" style="color:#0066CC;" {{ $category->color == '#0066CC' ? 'selected' : '' }}>Azure</option>
                         <option value="#0000CC" style="color:#0000CC;" {{ $category->color == '#0000CC' ? 'selected' : '' }}>Azul</option>
                         <option value="#6600CC" style="color:#6600CC;" {{ $category->color == '#6600CC' ? 'selected' : '' }}>Roxo</option>
                         <option value="#CC00CC" style="color:#CC00CC;" {{ $category->color == '#CC00CC' ? 'selected' : '' }}>Magenta</option>

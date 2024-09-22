@@ -6,13 +6,13 @@
 
 @section('content')
     <div class="p-6">
-        <h1 class="text-2xl font-normal mb-6">Cadastrar Nova Categoria</h1>
+        <h1 class="text-2xl font-normal mb-6">Cadastrar categoria</h1>
 
         <form id="Form" action="{{ route('category.store') }}" method="POST">
             @csrf   
             <div class="mb-6">
                 <div class="mb-4">
-                    <label for="name" class="text-sm mb-1 block">Nome da Categoria</label>
+                    <label for="name" class="text-sm mb-1 block">Nome</label>
                     <input type="text" name="name" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-md @error('name') border-red-500 @enderror" required>
                     @error('name')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -27,7 +27,7 @@
                         class="mt-1 px-4 py-2 border border-gray-300 rounded-md w-full @error('color') border-red-500 @enderror" 
                         required
                     >
-                    <option value="" disabled selected>Selecione a Cor</option>
+                    <option value="" disabled selected>Selecione uma cor</option>
                     <option value="#CC0000" style="color:#CC0000;">Vermelho</option>
                     <option value="#CC6600" style="color:#CC6600;">Laranja</option>
                     <option value="#CCCC00" style="color:#CCCC00;">Amarelo</option>
@@ -35,7 +35,7 @@
                     <option value="#00CC00" style="color:#00CC00;">Verde</option>
                     <option value="#00CC66" style="color:#00CC66;">Menta</option>
                     <option value="#00CCCC" style="color:#00CCCC;">Ciano</option>
-                    <option value="#0066CC" style="color:#0066CC;">Azul 1</option>
+                    <option value="#0066CC" style="color:#0066CC;">Azure</option>
                     <option value="#0000CC" style="color:#0000CC;">Azul</option>
                     <option value="#6600CC" style="color:#6600CC;">Roxo</option>
                     <option value="#CC00CC" style="color:#CC00CC;">Magenta</option>
