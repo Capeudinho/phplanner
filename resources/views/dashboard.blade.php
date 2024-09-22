@@ -20,16 +20,18 @@
             locale: 'pt-br',
             events: '/events',
             eventClick: function(info) {
+				var start = info.event.start.toLocaleString().split(/[/,:]\s*/);
+				start = start[0]+"/"+start[1]+"/"+start[2]+" "+start[3]+":"+start[4];
                 document.getElementById('eventTitle').innerText = info.event.title;
                 document.getElementById('eventid').value = info.event.id; 
                 document.getElementById('eventDescription').innerText = info.event.extendedProps.description;
-                document.getElementById('eventStart').innerText = info.event.start.toLocaleString();
+                document.getElementById('eventStart').innerText = start;
                 document.getElementById('eventStatus').innerText = info.event.extendedProps.status;
 
                 const statusTranslations = {
-                "finished": "Concluído",
-                "ongoing": "Em Progresso",
-                "delayed": "Atrasada"
+                "finished": "Concluída",
+                "ongoing": "Em progresso",
+                "delayed": "Pendente"
                
             };
                 document.getElementById('eventStatus').innerText = statusTranslations[info.event.extendedProps.status] || info.event.extendedProps.status;
@@ -114,7 +116,7 @@
                 <li class="mb-2">
                     <strong>{{ $goal->event->title }}</strong> 
                     <br>
-                    <span class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($goal->event->start)->format('d/m/Y') }}</span>
+                    <span class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($goal->event->start)->format('d/m/Y H:i') }}</span>
                 </li>
             @endforeach
         </ul>
@@ -129,7 +131,7 @@
     <span class="close">&times;</span>
     <h1 id="eventTitle" class="text-2xl font-semibold text-gray-700 mb-2"></h1>
     <p><strong>Descrição:</strong> <span id="eventDescription"></span></p>
-    <p><strong>Data de Início:</strong> <span id="eventStart"></span></p>
+    <p><strong>Data de início:</strong> <span id="eventStart"></span></p>
     <p><strong>Status:</strong> <span id="eventStatus"></span></p>
     <input type="hidden" id="eventid">
     <div class="flex justify-end mt-3">
