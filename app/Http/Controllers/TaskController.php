@@ -16,15 +16,13 @@ class TaskController extends Controller
 
 	public function index()
 	{
-		$tasks = Task::with('event')->whereHas('event', function ($query) {
-			$query->where('user_id', Auth::id());
-		})->get();
+		$tasks = Task::with('event')->whereHas('event', function ($query) {$query->where('user_id', Auth::id());})->get();
 		return view('task.index', compact('tasks'));
 	}
 
 	public function create()
 	{
-		$categories = Category::all();
+		$categories = Category::where('user_id', Auth::id())->get();
 		return view('task.create', compact('categories'));
 	}
 
@@ -36,7 +34,7 @@ class TaskController extends Controller
 			$event->title = $data['title'];
 			$event->description = $data['description'];
 			$event->start = $data['start'];
-			$event->category_id = $data['category_id'] ?? null;
+			$event->category_id = $data['category_id'];
 			$event->user_id = Auth::id();
 			$event->save();
 			$task = new Task();
@@ -56,7 +54,10 @@ class TaskController extends Controller
 
 	public function edit(string $id)
 	{
-		// return view('task.edit', compact('category'));
+		$task = Task::with('event')->findOrFail($id);
+		$categories = Category::where('user_id', Auth::id())->get();
+
+		return view('task.edit', compact(['task', 'categories']));
 	}
 
 	public function update(TaskUpdateRequest $request, string $id)
@@ -71,10 +72,10 @@ class TaskController extends Controller
 			$event->title = $data['title'] ?? $event->title;
 			$event->description = $data['description'] ?? $event->description;
 			$event->start = $data['start'] ?? $event->start;
-			$event->category_id = $data['category_id'] ?? $event->category_id;
+			$event->category_id = $data['category_id'];
 			$event->save();
 		});
-		// return redirect()->route('task.index');
+		return Redirect::route('task.index')->with('success', 'Tarefa atualizada com sucesso.');
 	}
 
 	public function destroy(string $id)
@@ -82,7 +83,7 @@ class TaskController extends Controller
 		$task = Task::find($id);
 		$event = Event::find($task->event->id);
 		$event->delete();
-		// return redirect()->route('task.index');
+		return redirect()->route('task.index');
 	}
 
 	public function events()

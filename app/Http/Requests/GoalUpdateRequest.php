@@ -27,10 +27,10 @@ class GoalUpdateRequest extends FormRequest
 		return [
 			'title' => ['string'],
 			'description' => ['string'],
-			'start' => ['date_format:Y-m-d H:i:s', 'string'],
-			'end' => ['date_format:Y-m-d H:i:s', 'string'],
+			'start' => ['date_format:Y-m-d\\TH:i', 'string'],
 			'duration' => [Rule::enum(GoalDuration::class)],
 			'status' => [Rule::enum(GoalStatus::class)],
+			'category_id' => ['nullable', 'exists:categories,id'],
 		];
 	}
 }

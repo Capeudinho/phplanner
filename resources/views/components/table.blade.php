@@ -14,7 +14,13 @@
             @foreach ($content as $index => $row)
                 <tr class="text-left hover:bg-gray-200 border border-gray-300 @if($index % 2 != 0) bg-gray-100 hover:bg-gray-200 @endif">
                     @foreach ($row as $cell)
-                        <td class="px-6 py-4">{{ $cell }}</td>
+                        @if(is_array($cell) && array_key_exists('color', $cell) && array_key_exists('name', $cell))
+                            <td class="px-6 py-4" style="color: {{ $cell['color'] }}">
+                                {{ $cell['name'] }}
+                            </td>
+                        @else
+                            <td class="px-6 py-4">{{ $cell }}</td>
+                        @endif
                     @endforeach
                     <td class="px-6 py-4 flex">
                         <a href="{{ route($editRoute, $row[0]) }}" class="text-blue-600 hover:underline">
