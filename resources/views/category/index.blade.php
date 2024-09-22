@@ -6,16 +6,32 @@
 
 @section('content')
     <div class="p-6">
+        <div class="flex">
+            <h1 class="text-2xl mb-4">
+                Suas Categorias
+            </h1>
+        </div>
         <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl">Suas Categorias</h1>
-            <a href="{{ route('category.create') }}" class="add-button">
-                <img src="{{ asset('icons/plus.svg') }}" alt="Add Icon"> Criar Nova Categoria
+            <div class="flex items-center">
+                <input
+                    type="text"
+                    id="searchInput"
+                    onkeyup="searchTable()"
+                    placeholder="Pesquisar"
+                    class="px-4 py-2 border border-gray-100 rounded-lg mr-2"
+                /> 
+            </div>
+
+            <a
+                href="{{ route('category.create') }}"
+                class="add-button"
+            >
+                <img src="{{ asset('icons/plus.svg') }}" alt="Add Icon">
+                Criar Nova Categoria
             </a>
         </div>
 
-    </div>
-
-    @include('components.table', [
+        @include('components.table', [
         'header' => ['ID', 'Nome', 'Cor'],
         'content' => $categories->map(function ($category) {
             $colorTranslations = [
@@ -34,14 +50,18 @@
             ];
     
             return [
-            $category->id,
-            ['name' => $category->name, 'color' => $category->color],
-            ['name' => $colorTranslations[$category->color] ?? $category->color, 'color' => $category->color],
-        ];
+                $category->id,
+                ['name' => $category->name, 'color' => $category->color],
+                ['name' => $colorTranslations[$category->color] ?? $category->color, 'color' => $category->color],
+            ];
         }),
         'editRoute' => 'category.edit',
         'deleteRoute' => 'category.destroy',
     ])
+
+    </div>
+
+    
 @endsection
 
 @push('scripts')
