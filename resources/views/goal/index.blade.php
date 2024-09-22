@@ -31,7 +31,7 @@
                 class="add-button"
             >
                 <img src="{{ asset('icons/plus.svg') }}" alt="Add Icon" >
-                Criar Nova Meta
+                Cadrastrar meta
             </a>
 
 
