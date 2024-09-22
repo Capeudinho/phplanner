@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Middleware\EnsureGoalOwnership;
 use App\Http\Middleware\EnsureTaskOwnership;
+use App\Http\Controllers\MailController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,5 +23,7 @@ Route::middleware('auth')->group(function () {
 	Route::resource('task', TaskController::class)->middleware(EnsureTaskOwnership::class);
 	Route::resource('goal', GoalController::class)->middleware(EnsureGoalOwnership::class);
 });
+
+Route::get('/send-email', [MailController::class, 'sendWeeklyReminderEmail']); // for testing
 
 require __DIR__.'/auth.php';
