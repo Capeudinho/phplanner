@@ -28,6 +28,7 @@ class GoalUpdateRequest extends FormRequest
 			'title' => ['string'],
 			'description' => ['string'],
 			'start' => ['date_format:Y-m-d H:i:s', 'string'],
+			'end' => ['date_format:Y-m-d H:i:s', 'string'],
 			'duration' => [Rule::enum(GoalDuration::class)],
 			'status' => [Rule::enum(GoalStatus::class)],
 		];

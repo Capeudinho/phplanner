@@ -19,23 +19,19 @@ class Event extends Model
 		'user_id',
 	];
 
-	public function user(): BelongsTo
-	{
-		return $this->belongsTo(User::class);
+	public function user(): BelongsTo {
+		return $this->belongsTo(User::class, 'user_id');
 	}
 
-	public function category(): BelongsTo
-	{
-		return $this->belongsTo(Category::class);
+	public function category(): BelongsTo {
+		return $this->belongsTo(Category::class, 'category_id');
 	}
 
-	public function task(): HasOne
-	{
-		return $this->hasOne(Task::class);
+	public function task(): HasOne {
+		return $this->hasOne(Task::class, 'task_id');
 	}
 
-	public function goal(): HasOne
-	{
-		return $this->hasOne(Goal::class);
+	public function goal(): HasOne {
+		return $this->hasOne(Goal::class, 'goal_id');
 	}
 }

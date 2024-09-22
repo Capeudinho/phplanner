@@ -6,21 +6,26 @@ use App\Http\Requests\TaskCreateRequest;
 use App\Http\Requests\TaskUpdateRequest;
 use App\Models\Event;
 use App\Models\Task;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class TaskController extends Controller
 {
 
 	public function index()
 	{
-		$tasks = Task::with('event')->where('user_id', Auth::id());
-		// return view('task.index', compact('category'));
+		$tasks = Task::with('event')->whereHas('event', function ($query) {
+			$query->where('user_id', Auth::id());
+		})->get();
+		return view('task.index', compact('tasks'));
 	}
 
 	public function create()
 	{
-		// return view('task.create', compact('category'));
+		$categories = Category::all();
+		return view('task.create', compact('categories'));
 	}
 
 	public function store(TaskCreateRequest $request)
@@ -40,7 +45,7 @@ class TaskController extends Controller
 			$task->event_id = $event->id;
 			$task->save();
 		});
-		// return redirect()->route('task.index');
+		return Redirect::route('task.index')->with('success', 'Tarefa criada com sucesso.');
 	}
 
 	public function show(string $id)
@@ -79,4 +84,27 @@ class TaskController extends Controller
 		$event->delete();
 		// return redirect()->route('task.index');
 	}
+
+	public function events()
+	{
+	    $events = Task::with('event')
+	        ->whereHas('event', function ($query) {
+	            $query->where('user_id', Auth::id());
+	        })
+	        ->get()
+	        ->map(function ($task, $category) {
+	            return [
+					'id' => $task->id,
+	                'title' => $task->event->title,
+	                'start' => $task->event->start,
+					'description' => $task->event->description,
+	                'status' => $task->status,
+					'color' => $task->category ? $task->category->color : null, 
+	                'category_name' => $task->category ? $task->category->name : null, 
+	            ];
+	        });
+
+	    return response()->json($events);
+	}
+	
 }

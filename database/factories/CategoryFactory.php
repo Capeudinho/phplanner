@@ -3,7 +3,10 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Enums\CategoryColor;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
+
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
@@ -19,7 +22,7 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'color' => '#ffffff',
+            'color' => Arr::random(CategoryColor::values()),
 			'user_id' => User::factory(),
         ];
     }
