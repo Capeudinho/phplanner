@@ -7,12 +7,11 @@
                         {{ $item }}
                     </th>
                 @endforeach
-                <th class="px-6 py-3 font-medium tracking-wider text-right">Ações</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($content as $index => $row)
-                <tr class="text-left hover:bg-gray-200 border border-gray-300  @if($index % 2 != 0) bg-gray-100 hover:bg-gray-200 @endif">
+                <tr class="text-left hover:bg-gray-200 border border-gray-300 @if($index % 2 != 0) bg-gray-100 hover:bg-gray-200 @endif">
                     @foreach ($row as $cell)
                         @if(is_array($cell) && array_key_exists('color', $cell) && array_key_exists('name', $cell))
                             <td class="px-6 py-4" style="color: {{ $cell['color'] }}">
@@ -22,18 +21,6 @@
                             <td class="px-6 py-4">{{ $cell }}</td>
                         @endif
                     @endforeach
-                    <td class="px-6 py-4 flex justify-end">
-                        <a href="{{ route($editRoute, $row[0]) }}" class="text-blue-600 hover:underline">
-                            <img src="{{ asset('icons/pencil.svg') }}" alt="Editar" class="h-4 w-4">
-                        </a>
-                        <form action="{{ route($deleteRoute, $row[0]) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este item?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:underline ml-4">
-                                <img src="{{ asset('icons/trash3.svg') }}" alt="Excluir" class="h-4 w-4">
-                            </button>
-                        </form>
-                    </td>
                 </tr>
             @endforeach
         </tbody>

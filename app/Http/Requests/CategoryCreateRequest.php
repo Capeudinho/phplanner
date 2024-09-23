@@ -24,22 +24,8 @@ class CategoryCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'color' => [
-                'required',
-                Rule::in(CategoryColor::values()), 
-            ], 
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'name.required' => 'O nome da categoria é obrigatório.',
-            'name.string' => 'O nome da categoria deve ser uma string.',
-            'name.max' => 'O nome da categoria não pode exceder 255 caracteres.',
-            'color.required' => 'A cor da categoria é obrigatória.',
-            'color.in' => 'A cor selecionada é inválida.', 
+            'name' => ['required', 'string'],
+            'color' => ['required', Rule::enum(CategoryColor::class)], 
         ];
     }
 }

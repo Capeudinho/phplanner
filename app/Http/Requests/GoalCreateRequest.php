@@ -27,10 +27,10 @@ class GoalCreateRequest extends FormRequest
         return [
             'title' => ['required', 'string'],
 			'description' => ['required', 'string'],
-			'start' => ['required', 'date'],
-			'end' => ['required', 'date'],
+			'start' => ['required', 'date_format:Y-m-d\\TH:i', 'string'],
 			'duration' => ['required', Rule::enum(GoalDuration::class)],
 			'status' => ['required', Rule::enum(GoalStatus::class)],
+			'category_id' => ['nullable', 'exists:categories,id'],
         ];
     }
 }

@@ -20,16 +20,18 @@
             locale: 'pt-br',
             events: '/events',
             eventClick: function(info) {
+				var start = info.event.start.toLocaleString().split(/[/,:]\s*/);
+				start = start[0]+"/"+start[1]+"/"+start[2]+" "+start[3]+":"+start[4];
                 document.getElementById('eventTitle').innerText = info.event.title;
                 document.getElementById('eventid').value = info.event.id; 
                 document.getElementById('eventDescription').innerText = info.event.extendedProps.description;
-                document.getElementById('eventStart').innerText = info.event.start.toLocaleString();
+                document.getElementById('eventStart').innerText = start;
                 document.getElementById('eventStatus').innerText = info.event.extendedProps.status;
 
                 const statusTranslations = {
-                "finished": "Concluído",
-                "ongoing": "Em Progresso",
-                "delayed": "Atrasada"
+                "finished": "Concluída",
+                "ongoing": "Em progresso",
+                "delayed": "Pendente"
                
             };
                 document.getElementById('eventStatus').innerText = statusTranslations[info.event.extendedProps.status] || info.event.extendedProps.status;
@@ -95,14 +97,32 @@
     <div class="flex">
         <h1 class="page-title">Seu Cronograma Mensal</h1>
     </div>
-
     <div class="flex justify-between">
         <div id='calendar' class="flex-1"></div>
-        <div class="goals-board ml-4">
-            <h2 class="text-xl mb-4 text-center text-gray-700">Metas da Semana</h2>
-        </div>
-    </div>
+        <div class="goals-board ml-60">
+        <header class="flex justify-between items-center mb-4 border-b border-gray-300 pb-2">
+            <h2 class="text-xl text-gray-700">Metas do mês</h2>
+            <a href="{{ route('goal.create') }}" class="add-button bg-blue-500 text-white px-2 py-1 rounded flex items-center mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+            </a>
+        </header>
+    @if ($goals->isEmpty())
+        <p class="text-center text-gray-600">Nenhuma meta para este mês.</p>
+    @else
+        <ul class="list-disc pl-5">
+            @foreach($goals as $goal)
+                <li class="mb-2">
+                    <strong>{{ $goal->event->title }}</strong> 
+                    <br>
+                    <span class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($goal->event->start)->format('d/m/Y H:i') }}</span>
+                </li>
+            @endforeach
+        </ul>
+    @endif
 </div>
+
 
 
 <!-- Modal -->
@@ -111,7 +131,7 @@
     <span class="close">&times;</span>
     <h1 id="eventTitle" class="text-2xl font-semibold text-gray-700 mb-2"></h1>
     <p><strong>Descrição:</strong> <span id="eventDescription"></span></p>
-    <p><strong>Data de Início:</strong> <span id="eventStart"></span></p>
+    <p><strong>Data de início:</strong> <span id="eventStart"></span></p>
     <p><strong>Status:</strong> <span id="eventStatus"></span></p>
     <input type="hidden" id="eventid">
     <div class="flex justify-end mt-3">

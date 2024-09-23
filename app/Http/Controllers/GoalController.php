@@ -16,15 +16,13 @@ class GoalController extends Controller
 
 	public function index()
 	{
-		$goals = Goal::with('event')->whereHas('event', function ($query) {
-			$query->where('user_id', Auth::id());
-		})->get();
+		$goals = Goal::with('event')->whereHas('event', function ($query) {$query->where('user_id', Auth::id());})->get();
 		return view('goal.index', compact('goals'));
 	}
 
 	public function create()
 	{
-		$categories = Category::all();
+		$categories = Category::where('user_id', Auth::id())->get();
 		return view('goal.create', compact('categories'));
 	}
 
@@ -36,7 +34,7 @@ class GoalController extends Controller
 			$event->title = $data['title'];
 			$event->description = $data['description'];
 			$event->start = $data['start'];
-			$event->category_id = $data['category_id'] ?? null;
+			$event->category_id = $data['category_id'];
 			$event->user_id = Auth::id();
 			$event->save();
 			$goal = new Goal();
@@ -57,9 +55,10 @@ class GoalController extends Controller
 	
 	public function edit(string $id)
 	{
-		$goal = Goal::with('event')->findOrFail($id); 
+		$goal = Goal::with('event')->findOrFail($id);
+		$categories = Category::where('user_id', Auth::id())->get();
 	
-		return view('goal.edit', compact('goal'));
+		return view('goal.edit', compact(['goal', 'categories']));
 	}
 	
 	public function update(GoalUpdateRequest $request, string $id)
@@ -74,7 +73,7 @@ class GoalController extends Controller
 			$event->title = $data['title'] ?? $event->title;
 			$event->description = $data['description'] ?? $event->description;
 			$event->start = $data['start'] ?? $event->start;
-			$event->category_id = $data['category_id'] ?? $event->category_id;
+			$event->category_id = $data['category_id'];
 			$event->save();
 		});
 		return Redirect::route('goal.index')->with('success', 'Meta atualizada com sucesso.');
@@ -96,5 +95,17 @@ class GoalController extends Controller
 
 		return view('goal.index', compact('goals'));
 	}
+
+	public function dashboard()
+{
+    $currentMonth = now()->month;
+    $goals = Goal::with('event')->whereHas('event', function ($query) use ($currentMonth) {
+        $query->where('user_id', Auth::id())
+              ->whereMonth('start', $currentMonth);
+    })->get();
+
+    return view('dashboard', compact('goals'));
+}
+
 
 }

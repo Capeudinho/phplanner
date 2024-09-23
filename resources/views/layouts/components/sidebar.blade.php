@@ -22,6 +22,13 @@
             </a>
         </li>
 
+		<li class="hover:bg-gray-200 rounded-lg flex items-center p-2">
+            <a href="{{ route('category.index') }}" class="text-gray-700 hover:text-gray-900 block w-full flex items-center">
+                <img src="{{ asset('icons/category.svg') }}" alt="Dashboard Icon" class="h-5 w-5">
+                <span class="ml-2">Categorias</span>
+            </a>
+        </li>
+
         <li class="hover:bg-gray-200 rounded-lg flex items-center p-2">
             <a href="{{ route('report.index') }}" class="text-gray-700 hover:text-gray-900 block w-full flex items-center">
                 <img src="{{ asset('icons/report.svg') }}" alt="Dashboard Icon" class="h-5 w-5">
