@@ -50,25 +50,6 @@ class ReportController extends Controller
 		];
 
 		$reports['finishedGoals']['results'] = DB::select(
-			'SELECT COUNT(*) AS quantidade, (CAST(COUNT(*) AS FLOAT)/(
-				SELECT COUNT(*)
-				FROM users u, events e, goals g
-				WHERE u.id = ?
-				AND u.id = e.user_id
-				AND e.id = g.event_id
-				AND e.start >= NOW()-INTERVAL \'365 DAYS\'
-				AND e.start <= NOW()))*100 AS percent
-			FROM users u, events e, goals g
-			WHERE u.id = ?
-			AND u.id = e.user_id
-			AND e.id = g.event_id
-			AND g.status = \'succeeded\'
-			AND e.start >= NOW()-INTERVAL \'365 DAYS\'
-			AND e.start <= NOW()',
-			[$id, $id]
-		);
-
-		$reports['finishedGoals']['results'] = DB::select(
 			'SELECT COUNT(*) AS quantity, (CAST(COUNT(*) AS FLOAT)/(
 				SELECT COUNT(*)
 				FROM users u, events e, goals g
