@@ -13,7 +13,7 @@ class ReportController extends Controller
 		$id = Auth::id();
 		$reports = [
 			'finishedGoals' => [
-				'title' => 'Quantidade e porcentagem de metas finalizadas',
+				'title' => 'Quantidade e porcentagem de metas cumpridas',
 				'aliases' => ['Quantidade', "Porcentagem"],
 				'results' => [],
 			],
@@ -22,9 +22,14 @@ class ReportController extends Controller
 				'aliases' => ['Quantidade', "Porcentagem"],
 				'results' => [],
 			],
+			'productiveMonths' => [
+				'title' => 'Meses mais produtivos (em ordem)',
+				'aliases' => ['Mês', 'Quantidade'],
+				'results' => [],
+			],
 			'productiveWeeks' => [
 				'title' => 'Semanas mais produtivas (em ordem)',
-				'aliases' => ['Semana', 'Quantidade'],
+				'aliases' => ['Mês', 'Semana', 'Quantidade'],
 				'results' => [],
 			],
 			'productiveTurns' => [
@@ -44,6 +49,25 @@ class ReportController extends Controller
 			],
 		];
 
+		$reports['finishedGoals']['results'] = DB::select(
+			'SELECT COUNT(*) AS quantity, (CAST(COUNT(*) AS FLOAT)/(
+				SELECT COUNT(*)
+				FROM users u, events e, goals g
+				WHERE u.id = ?
+				AND u.id = e.user_id
+				AND e.id = g.event_id
+				AND e.start >= NOW()-INTERVAL \'365 DAYS\'
+				AND e.start <= NOW()))*100 AS percent
+			FROM users u, events e, goals g
+			WHERE u.id = ?
+			AND u.id = e.user_id
+			AND e.id = g.event_id
+			AND g.status = \'succeeded\'
+			AND e.start >= NOW()-INTERVAL \'365 DAYS\'
+			AND e.start <= NOW()',
+			[$id, $id]
+		);
+
 		$reports['finishedTasks']['results'] = DB::select(
 			'SELECT COUNT(*) AS quantity, (CAST(COUNT(*) AS FLOAT)/(
 				SELECT COUNT(*)
@@ -61,6 +85,38 @@ class ReportController extends Controller
 			AND e.start >= NOW()-INTERVAL \'365 DAYS\'
 			AND e.start <= NOW()',
             [$id]
+		);
+		
+		$reports['productiveMonths']['results'] = DB::select(
+			'SELECT EXTRACT(MONTH FROM e.start) AS month,
+			COUNT(*) AS tasks_count
+			FROM users u, events e, tasks t
+			WHERE u.id = ?
+			AND u.id = e.user_id
+			AND e.id = t.event_id
+			AND t.status = \'finished\'
+			AND e.start >= NOW() - INTERVAL \'365 DAYS\'
+			AND e.start <= NOW()
+			GROUP BY month
+			ORDER BY tasks_count DESC',
+			[$id]
+		);
+
+		$reports['productiveWeeks']['results'] = DB::select(
+			'SELECT 
+				EXTRACT(MONTH FROM e.start) AS month,
+       			CEIL(EXTRACT(DAY FROM e.start) / 7) AS week,
+        		COUNT(*) AS tasks_count
+			FROM users u, events e, tasks t
+			WHERE u.id = ?
+			AND u.id = e.user_id
+			AND e.id = t.event_id
+			AND t.status = \'finished\'
+			AND e.start >= NOW() - INTERVAL \'365 DAYS\'
+			AND e.start <= NOW()
+			GROUP BY month, week
+			ORDER BY tasks_count DESC',
+			[$id]
 		);
 
 		$reports['productiveTurns']['results'] = DB::select(
