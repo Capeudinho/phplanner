@@ -117,7 +117,7 @@
         <div id='calendar' class="flex-1"></div>
         <div class="goals-board ml-60">
         <header class="flex justify-between items-center mb-4 border-b border-gray-300 pb-2">
-            <h2 class="text-xl text-gray-700">Metas do mês</h2>
+            <h2 class="text-xl text-gray-700">Suas Metas</h2>
             <a href="{{ route('goal.create') }}" class="add-button bg-blue-500 text-white px-2 py-1 rounded flex items-center mb-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>

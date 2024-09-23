@@ -21,10 +21,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-           EventSeeder::class,
-        ]);
-
 		$user = User::factory()->create(['name' => 'Test User', 'email' => 'test@example.com',]);
 		$taskCategory = Category::factory(['user_id' => $user->id, 'color' => CategoryColor::RED])->create();
 		$eventCategory = Category::factory(['user_id' => $user->id, 'color' => CategoryColor::CYAN])->create();

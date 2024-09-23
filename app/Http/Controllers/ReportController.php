@@ -24,12 +24,12 @@ class ReportController extends Controller
 			],
 			'productiveWeeks' => [
 				'title' => 'Semanas mais produtivas (em ordem)',
-				'aliases' => ['Semana'],
+				'aliases' => ['Semana', 'Quantidade'],
 				'results' => [],
 			],
 			'productiveTurns' => [
 				'title' => 'Turnos mais produtivos (em ordem)',
-				'aliases' => ['Turno'],
+				'aliases' => ['Turno', 'Quantidade'],
 				'results' => [],
 			],
 			'finishedTaskCategories' => [
@@ -45,19 +45,20 @@ class ReportController extends Controller
 		];
 
 		$reports['finishedTasks']['results'] = DB::select(
-			'SELECT COUNT(*) AS quantidade, (CAST(COUNT(*) AS FLOAT)/(
+			'SELECT COUNT(*) AS quantity, (CAST(COUNT(*) AS FLOAT)/(
 				SELECT COUNT(*)
 				FROM users u, events e, tasks t
 				WHERE u.id = ' . $id .
 				' AND u.id = e.user_id
 				AND e.id = t.event_id
-				AND e.start >= NOW() - INTERVAL \'365 DAYS\'))*100 AS porcentagem
+				AND e.start >= NOW() - INTERVAL \'365 DAYS\'))*100 AS percent
 			FROM users u, events e, tasks t
-			WHERE u.id = ' . $id .
-				' AND u.id = e.user_id
+			WHERE u.id = ?
+			AND u.id = e.user_id
 			AND e.id = t.event_id
 			AND t.status = \'finished\'
-			AND e.start >= NOW() - INTERVAL \'365 DAYS\''
+			AND e.start >= NOW() - INTERVAL \'365 DAYS\'',
+            [$id]
 		);
 
 		$reports['productiveTurns']['results'] = DB::select(
@@ -66,42 +67,40 @@ class ReportController extends Controller
         		WHEN EXTRACT(HOUR FROM e.start) >= 6 AND EXTRACT(HOUR FROM e.start) < 12 THEN \'Manhã\'
         		WHEN EXTRACT(HOUR FROM e.start) >= 12 AND EXTRACT(HOUR FROM e.start) < 18 THEN \'Tarde\'
         		ELSE \'Noite\'
-    		END AS turn
+    		END AS turn,
+			COUNT(*) AS quantity
 			FROM users u, events e, tasks t
-			WHERE u.id = ' . $id .
-				' AND u.id = e.user_id
+			WHERE u.id = ?
+			AND u.id = e.user_id
 			AND e.id = t.event_id
 			AND t.status = \'finished\'
 			AND e.start >= NOW() - INTERVAL \'365 DAYS\'
 			GROUP BY turn
-			ORDER BY COUNT(*) DESC'
+			ORDER BY COUNT(*) DESC',
+            [$id]
 		);
 
 		$reports['finishedTaskCategories']['results'] = DB::select(
-            'SELECT 
-                categories.name,
-                COUNT(*) AS event_count
-            FROM events
-            INNER JOIN categories ON events.category_id = categories.id
-            INNER JOIN tasks ON tasks.event_id = events.id
-            WHERE events.user_id = ? 
-                AND tasks.status = \'finished\'
-            GROUP BY events.category_id, categories.name
-            ORDER BY event_count DESC',
+            'SELECT c.name, COUNT(*) AS quantity
+            FROM events e
+            INNER JOIN categories c ON e.category_id = c.id
+            INNER JOIN tasks t ON t.event_id = e.id
+            WHERE e.user_id = ? 
+            AND t.status = \'finished\'
+            GROUP BY c.id, c.name
+            ORDER BY quantity DESC',
             [$id]
         );
 
 		$reports['finishedGoalCategories']['results'] = DB::select(
-            'SELECT 
-                categories.name,
-                COUNT(*) AS goals_count
-            FROM events
-            INNER JOIN categories ON events.category_id = categories.id
-            INNER JOIN goals ON goals.event_id = events.id
-            WHERE events.user_id = ? 
-                AND goals.status = \'succeeded\'
-            GROUP BY events.category_id, categories.name
-            ORDER BY goals_count DESC',
+            'SELECT c.name,COUNT(*) AS quantity
+            FROM events e
+            INNER JOIN categories c ON e.category_id = c.id
+            INNER JOIN goals g ON g.event_id = e.id
+            WHERE e.user_id = ? 
+            AND g.status = \'succeeded\'
+            GROUP BY c.id, c.name
+            ORDER BY quantity DESC',
             [$id]
         );
 
