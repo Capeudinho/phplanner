@@ -51,13 +51,15 @@ class ReportController extends Controller
 				WHERE u.id = ' . $id .
 				' AND u.id = e.user_id
 				AND e.id = t.event_id
-				AND e.start >= NOW() - INTERVAL \'365 DAYS\'))*100 AS percent
+				AND e.start >= NOW()-INTERVAL \'365 DAYS\'
+				AND e.start <= NOW()))*100 AS percent
 			FROM users u, events e, tasks t
 			WHERE u.id = ?
 			AND u.id = e.user_id
 			AND e.id = t.event_id
 			AND t.status = \'finished\'
-			AND e.start >= NOW() - INTERVAL \'365 DAYS\'',
+			AND e.start >= NOW()-INTERVAL \'365 DAYS\'
+			AND e.start <= NOW()',
             [$id]
 		);
 
@@ -74,7 +76,8 @@ class ReportController extends Controller
 			AND u.id = e.user_id
 			AND e.id = t.event_id
 			AND t.status = \'finished\'
-			AND e.start >= NOW() - INTERVAL \'365 DAYS\'
+			AND e.start >= NOW()-INTERVAL \'365 DAYS\'
+			AND e.start <= NOW()
 			GROUP BY turn
 			ORDER BY COUNT(*) DESC',
             [$id]
@@ -85,7 +88,9 @@ class ReportController extends Controller
             FROM events e
             INNER JOIN categories c ON e.category_id = c.id
             INNER JOIN tasks t ON t.event_id = e.id
-            WHERE e.user_id = ? 
+            WHERE e.user_id = ?
+			AND e.start >= NOW()-INTERVAL\'365 DAYS\'
+			AND e.start <= NOW()
             AND t.status = \'finished\'
             GROUP BY c.id, c.name
             ORDER BY quantity DESC',
@@ -97,7 +102,9 @@ class ReportController extends Controller
             FROM events e
             INNER JOIN categories c ON e.category_id = c.id
             INNER JOIN goals g ON g.event_id = e.id
-            WHERE e.user_id = ? 
+            WHERE e.user_id = ?
+			AND e.start >= NOW()-INTERVAL \'365 DAYS\'
+			AND e.start <= NOW()
             AND g.status = \'succeeded\'
             GROUP BY c.id, c.name
             ORDER BY quantity DESC',
