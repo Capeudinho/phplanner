@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Event;
+use App\Models\Task;
 
 class EventSeeder extends Seeder
 {
@@ -15,27 +16,20 @@ class EventSeeder extends Seeder
         ]);
 
         $event1 = Event::factory()->create([
-            'title' => 'Very Important Meeting',
-            'description' => 'Meeting about those very important things.',
-            'start' => now()->startOfWeek()->addWeek(),
+            'title' => 'Reunião com Equipe I',
+            'description' => 'Reunião destinada a revisar estratégias de projeto e alinhar objetivos entre a equipe',
+            'start' =>  '2024-09-25 09:00:00',
             'user_id' => $user->id,
         ]);
 
         $event2 = Event::factory()->create([
-            'title' => 'Groceries',
-            'description' => 'Need cleaning supplies.',
-            'start' => now()->startOfWeek()->addWeek(),
+            'title' => 'Compras',
+            'description' => 'Importante: comprar materias de limpeza, comida para o cachoro e lâmpada para a sala',
+            'start' =>  '2024-09-24 10:00:00',
             'user_id' => $user->id,
         ]);
 
-        $event1->task()->create([
-            'duration' => 'half hour',
-            'status' => 'ongoing',
-        ]);
-
-        $event2->task()->create([
-            'duration' => 'hour',
-            'status' => 'ongoing',
-        ]);
+        Task::factory()->create(['event_id' => $event1->id, 'duration' => 'half hour', 'status' => 'ongoing']);
+        Task::factory()->create(['event_id' => $event2->id, 'duration' => 'hour', 'status' => 'ongoing']);
     }
 }
