@@ -26,6 +26,4 @@ Route::middleware('auth')->group(function () {
 	Route::get('/dashboard', [GoalController::class, 'goalevents'])->name('dashboard');
 });
 
-
-
 require __DIR__.'/auth.php';
