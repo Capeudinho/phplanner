@@ -8,7 +8,6 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Middleware\EnsureCategoryOwnership;
 use App\Http\Middleware\EnsureGoalOwnership;
 use App\Http\Middleware\EnsureTaskOwnership;
-use App\Http\Controllers\MailController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,9 +30,5 @@ Route::middleware('auth')->group(function () {
 	// rotas do fullcalendar
 	Route::get('/events', [TaskController::class, 'events']); 
 });
-
-
-
-Route::get('/send-email', [MailController::class, 'sendWeeklyReminderEmail']); // for testing
 
 require __DIR__.'/auth.php';
