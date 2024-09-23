@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class ReportController extends Controller {
+class ReportController extends Controller
+{
 
-    public function index() {
+	public function index()
+	{
 		$id = Auth::id();
 		$reports = [
 			'finishedGoals' => [
@@ -32,12 +34,12 @@ class ReportController extends Controller {
 			],
 			'finishedTaskCategories' => [
 				'title' => 'Categorias de tarefas mais realizadas (em ordem)',
-				'aliases' => ['Categoria'],
+				'aliases' => ['Categoria', 'Quantidade'],
 				'results' => [],
 			],
 			'finishedGoalCategories' => [
 				'title' => 'Categorias de metas mais realizadas (em ordem)',
-				'aliases' => ['Categoria'],
+				'aliases' => ['Categoria', 'Quantidade'],
 				'results' => [],
 			],
 		];
@@ -46,16 +48,17 @@ class ReportController extends Controller {
 			'SELECT COUNT(*) AS quantidade, (CAST(COUNT(*) AS FLOAT)/(
 				SELECT COUNT(*)
 				FROM users u, events e, tasks t
-				WHERE u.id = '.$id.
+				WHERE u.id = ' . $id .
 				' AND u.id = e.user_id
 				AND e.id = t.event_id
 				AND e.start >= NOW() - INTERVAL \'365 DAYS\'))*100 AS porcentagem
 			FROM users u, events e, tasks t
-			WHERE u.id = '.$id.
-			' AND u.id = e.user_id
+			WHERE u.id = ' . $id .
+				' AND u.id = e.user_id
 			AND e.id = t.event_id
 			AND t.status = \'finished\'
-			AND e.start >= NOW() - INTERVAL \'365 DAYS\'');
+			AND e.start >= NOW() - INTERVAL \'365 DAYS\''
+		);
 
 		$reports['productiveTurns']['results'] = DB::select(
 			'SELECT CASE
@@ -65,14 +68,43 @@ class ReportController extends Controller {
         		ELSE \'Noite\'
     		END AS turn
 			FROM users u, events e, tasks t
-			WHERE u.id = '.$id.
-			' AND u.id = e.user_id
+			WHERE u.id = ' . $id .
+				' AND u.id = e.user_id
 			AND e.id = t.event_id
 			AND t.status = \'finished\'
 			AND e.start >= NOW() - INTERVAL \'365 DAYS\'
 			GROUP BY turn
-			ORDER BY COUNT(*) DESC');
+			ORDER BY COUNT(*) DESC'
+		);
 
-        return view('report.index', compact('reports'));
-    }
+		$reports['finishedTaskCategories']['results'] = DB::select(
+            'SELECT 
+                categories.name,
+                COUNT(*) AS event_count
+            FROM events
+            INNER JOIN categories ON events.category_id = categories.id
+            INNER JOIN tasks ON tasks.event_id = events.id
+            WHERE events.user_id = ? 
+                AND tasks.status = \'finished\'
+            GROUP BY events.category_id, categories.name
+            ORDER BY event_count DESC',
+            [$id]
+        );
+
+		$reports['finishedGoalCategories']['results'] = DB::select(
+            'SELECT 
+                categories.name,
+                COUNT(*) AS goals_count
+            FROM events
+            INNER JOIN categories ON events.category_id = categories.id
+            INNER JOIN goals ON goals.event_id = events.id
+            WHERE events.user_id = ? 
+                AND goals.status = \'succeeded\'
+            GROUP BY events.category_id, categories.name
+            ORDER BY goals_count DESC',
+            [$id]
+        );
+
+		return view('report.index', compact('reports'));
+	}
 }
