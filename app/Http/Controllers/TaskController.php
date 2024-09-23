@@ -86,22 +86,24 @@ class TaskController extends Controller
 		return redirect()->route('task.index');
 	}
 
-	public function events()
+	public function taskevents()
 	{
-	    $events = Task::with('event')
-	        ->whereHas('event', function ($query) {
-	            $query->where('user_id', Auth::id());
-	        })
+	    $events = Event::whereHas('task')
+			->with('task')
+			->with('category')
+	        ->where('user_id', Auth::id())
 	        ->get()
-	        ->map(function ($task, $category) {
+	        ->map(function ($event) {
 	            return [
-					'id' => $task->id,
-	                'title' => $task->event->title,
-	                'start' => $task->event->start,
-					'description' => $task->event->description,
-	                'status' => $task->status,
-					'color' => $task->category ? $task->category->color : null, 
-	                'category_name' => $task->category ? $task->category->name : null, 
+					'id' => $event->task->id,
+	                'title' => $event->title,
+	                'start' => $event->start,
+					'duration_info' => $event->task->duration,
+					'description' => $event->description,
+	                'status' => $event->task->status,
+					'color' => $event->category ? $event->category->color : "#000000",
+					'category_color' => $event->category ? $event->category->color : null, 
+	                'category_name' => $event->category ? $event->category->name : null, 
 	            ];
 	        });
 

@@ -87,25 +87,34 @@ class GoalController extends Controller
 		return Redirect::route('goal.index')->with('success', 'Meta excluida com sucesso.');
 	}
 
-	public function filterByStatus(string $status)
+	public function goalevents()
 	{
-		$goals = Goal::with('event')->whereHas('event', function ($query) {
-			$query->where('user_id', Auth::id());
-		})->where('status', $status)->get();
+	    // $currentMonth = now()->month;
+	    // $goals = Goal::with('event')->whereHas('event', function ($query) use ($currentMonth) {
+	    //     $query->where('user_id', Auth::id())
+	    //           ->whereMonth('start', $currentMonth);
+	    // })->get();
 
-		return view('goal.index', compact('goals'));
+		$events = Event::whereHas('goal')
+		->with('goal')
+		->with('category')
+		->where('user_id', Auth::id())
+		->get()
+		->map(function ($event) {
+			return [
+				'id' => $event->goal->id,
+				'title' => $event->title,
+				'start' => $event->start,
+				'duration_info' => $event->goal->duration,
+				'description' => $event->description,
+				'status' => $event->goal->status,
+				'color' => $event->category ? $event->category->color : '#000000',
+				'category_color' => $event->category ? $event->category->color : null, 
+				'category_name' => $event->category ? $event->category->name : null, 
+			];
+		});
+
+	    return view('dashboard', compact('events'));
+		// return response()->json($events);
 	}
-
-	public function dashboard()
-{
-    $currentMonth = now()->month;
-    $goals = Goal::with('event')->whereHas('event', function ($query) use ($currentMonth) {
-        $query->where('user_id', Auth::id())
-              ->whereMonth('start', $currentMonth);
-    })->get();
-
-    return view('dashboard', compact('goals'));
-}
-
-
 }

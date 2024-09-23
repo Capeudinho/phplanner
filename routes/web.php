@@ -14,8 +14,6 @@ Route::get('/', function () {
 	return view('welcome');
 })->middleware('guest'); 
 
-Route::get('/dashboard', [GoalController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
 	Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 	Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -24,11 +22,8 @@ Route::middleware('auth')->group(function () {
 	Route::resource('goal', GoalController::class)->middleware(EnsureGoalOwnership::class);
 	Route::resource('category', CategoryController::class)->middleware(EnsureCategoryOwnership::class);
 	Route::resource('report', ReportController::class)->only(['index']);
-	Route::get('/goals/filter/{status}', [GoalController::class, 'filterByStatus'])->middleware('auth')->name('goals.filter');
-
-
-	// rotas do fullcalendar
-	Route::get('/events', [TaskController::class, 'events']); 
+	Route::get('/taskevents', [TaskController::class, 'taskevents']);
+	Route::get('/dashboard', [GoalController::class, 'goalevents'])->name('dashboard');
 });
 
 require __DIR__.'/auth.php';
