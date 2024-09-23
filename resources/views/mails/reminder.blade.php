@@ -1,22 +1,22 @@
 @extends('mails.mail')
 
 @section('content')
-    <h2 style="color: #333;">Lembrete Semanal de Tarefas</h2>
-    <p>Olá {{$name}},</p>
+    <h2 style="color: #333;">Lembrete semanal de tarefas</h2>
+    <p>Olá, {{$name}}.</p>
     
-    <p>Você tem algumas tarefas importantes se aproximando! Aqui está uma visão geral do que está por vir esta semana:</p>
+    <p>Você tem algumas tarefas importantes se aproximando! Aqui está uma visão geral do que está por vir esta semana.</p>
     
     <?php 
     $durationTranslations = [
-        \App\Enums\TaskDuration::HALF_HOUR->value => 'Meia hora',
-        \App\Enums\TaskDuration::HOUR->value => 'Hora',
-        \App\Enums\TaskDuration::TURN->value => 'Turno',
+        \App\Enums\TaskDuration::HALF_HOUR->value => '30 minutos',
+        \App\Enums\TaskDuration::HOUR->value => '1 hora',
+        \App\Enums\TaskDuration::TURN->value => '1 turno',
     ];
 
     $statusTranslations = [
-        \App\Enums\TaskStatus::FINISHED->value => 'Concluído',
-        \App\Enums\TaskStatus::ONGOING->value => 'Em andamento',
-        \App\Enums\TaskStatus::DELAYED->value => 'Adiada',
+        \App\Enums\TaskStatus::FINISHED->value => 'Concluída',
+        \App\Enums\TaskStatus::ONGOING->value => 'Em progresso',
+        \App\Enums\TaskStatus::DELAYED->value => 'Pendente',
     ]; 
     ?>
 

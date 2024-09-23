@@ -32,7 +32,7 @@ class WeeklyReminder extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Lembrete Semanal de Tarefas',
+            subject: 'Lembrete semanal de tarefas',
         );
     }
 

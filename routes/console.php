@@ -24,4 +24,4 @@ Schedule::call(function () {
         Mail::to($user->email)
         ->send(new WeeklyReminder($user->name, $userTasks));
     }
-})->weekly();
+})->everyMinute();
