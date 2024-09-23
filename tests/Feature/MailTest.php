@@ -2,39 +2,39 @@
 
 namespace Tests\Feature;
 
-
 use App\Models\Event;
 use App\Models\User;
+use App\Models\Task;
 use Tests\TestCase;
-use App\Http\Controllers\MailController;
 use App\Mail\WeeklyReminder;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Carbon\Carbon;
 
 class MailTest extends TestCase
 {
     use RefreshDatabase;
-
-    public function test_send_weekly_reminder_email()
+    
+    public function testSendWeeklyTaskReminder()
     {
         Mail::fake([WeeklyReminder::class]);
 
         $user = User::factory()->create([
-            'email' => 'phplanner.project@gmail.com', // Mailtrap email
+            'email' => 'phplanner.project@gmail.com', 
         ]);
 
         $event = Event::factory()->create([
-            'title' => 'Very Important Meeting',
-            'description' => 'Meeting about those very important things.',
-            'start' => now()->startOfWeek()->addWeek(),
+            'title' => 'Reunião',
+            'description' => 'Reunião importante',
+            'start' => '2024-10-01 08:00:00',
             'user_id' => $user->id,
         ]);
-        
-        $event->task()->create(['duration' => 'half hour', 'status' => 'ongoing']);
 
-        $controller = new MailController();
-        $response = $controller->sendWeeklyReminderEmail();
-        $this->assertEquals("Weekly reminder email sent successfully!", $response);
+        Task::factory()->create(['event_id' => $event->id, 'duration' => 'half hour', 'status' => 'ongoing']);
+        
+        Carbon::setTestNow(Carbon::create(2024, 9, 29, 00));
+
+        $this->artisan('schedule:run');
 
         Mail::assertSent(WeeklyReminder::class, function ($mail) use ($user) {
             return $mail->hasTo($user->email);
